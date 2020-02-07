@@ -55,6 +55,7 @@ class RoleFirestoreService {
     await Firestore.instance.collection('UserRoles').where('email',isEqualTo: email).getDocuments().then((value){
       value.documents.forEach((f) async =>
       {
+        print(f.documentID),
         await Firestore.instance.collection('UserRoles').document(f.documentID).delete()
 
       });

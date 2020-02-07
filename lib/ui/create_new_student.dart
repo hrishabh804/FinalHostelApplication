@@ -140,8 +140,8 @@ class _CreateStudentPageState extends State<CreateStudentPage> {
   }
 
   Future uploadFile() async {
-    String usn= _usnController.text;
-    String college = widget.students.floor;
+    String usn= _usnController.text.toUpperCase();
+    String college = widget.students.floor.toUpperCase();
     _showDialog();
 
 
@@ -156,9 +156,9 @@ class _CreateStudentPageState extends State<CreateStudentPage> {
       setState(() {
         _uploadFileURL =fileURL;
         print(_uploadFileURL);
-        db.createStudent(_usnController.text.toUpperCase(),_nameController.text.toUpperCase(),_roomNumberController.text.toUpperCase(),_collegeNameController.text,_floorController.text.toUpperCase(),_uploadFileURL,_emailController.text);
-        role.createRoleStudent(widget.students.collegeName, _emailController.text, _nameController.text,'student','');
-          db.addStudentToRoom(widget.students.collegeName,widget.students.floor,widget.students.roomNumber,_nameController.text);
+        db.createStudent(_usnController.text.toUpperCase(),_nameController.text.toUpperCase(),_roomNumberController.text.toUpperCase(),_collegeNameController.text.toUpperCase(),_floorController.text.toUpperCase(),_uploadFileURL,_emailController.text);
+        role.createRoleStudent(widget.students.collegeName.toUpperCase(), _emailController.text, _nameController.text.toUpperCase(),'student','');
+          db.addStudentToRoom(widget.students.collegeName.toUpperCase(),widget.students.floor.toUpperCase(),widget.students.roomNumber.toUpperCase(),_nameController.text.toUpperCase());
           Navigator.pop(context);
           isLoading = false;
         Navigator.of(context).pop();

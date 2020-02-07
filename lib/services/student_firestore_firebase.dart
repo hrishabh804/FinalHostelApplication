@@ -90,7 +90,7 @@ class StudentFirestoreService {
 
   }
   Future<String> deleteStudentFromRoom(String floor,String college, String room, String name) async {
-    List<String> list =[name.toLowerCase()];
+    List<String> list =[name.toUpperCase()];
     print(list);
     String str;
     await Firestore.instance.collection('Rooms').where('collegeName',isEqualTo: college).where('floorLevel',isEqualTo:floor).where('roomNumber',isEqualTo:room).getDocuments().then((value){

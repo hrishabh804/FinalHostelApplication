@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hostel_project/model/Student.dart';
 import 'package:hostel_project/services/student_firestore_firebase.dart';
+import 'package:hostel_project/services/user_roles_firestore.dart';
 import 'package:hostel_project/ui/create_new_student.dart';
 import 'package:slimy_card/slimy_card.dart';
 
@@ -29,6 +30,7 @@ class StudentList extends StatefulWidget {
 class _StudentListState extends State<StudentList> {
   List<Students> items;
   StudentFirestoreService db = new StudentFirestoreService();
+  RoleFirestoreService db1 = new RoleFirestoreService();
   StreamSubscription<QuerySnapshot>roomsSub;
   Random random = new Random();
 
@@ -190,19 +192,18 @@ class _StudentListState extends State<StudentList> {
   }
 
   Future _deleteStudent(BuildContext context, Students students, int position) async {
-    String usn = students.usn.toLowerCase();
-    String college = students.collegeName;
+    String usn = students.usn.toUpperCase();
+    String college = students.collegeName.toUpperCase();
     String url = students.imageURL;
     print(url);
     db.deleteStudents(students.id).then((student)async {
       db.deleteStudentFromRoom(students.floor, students.collegeName,students.roomNumber,students.name);
-
+      db1.deleteFromUserRole(students.email);
       setState(() {
         StorageReference storageReference = FirebaseStorage.instance.ref().child('Students/$college/$usn');
         storageReference.delete().then((onValue){
           print('Deleted');
           items.removeAt(position);
-          db.deleteStudentFromRoom(students.floor, students.collegeName,students.roomNumber,students.name);
         }).catchError((onError){
           print(onError);
         });
