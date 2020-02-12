@@ -50,6 +50,21 @@ class RoleFirestoreService {
       });
     });
   }
+  updateUserRoleEmail(String email,String updatedEmail,{int offset, int limit}) async{
+    print(email+'phele email');
+    print(updatedEmail+'updated email');
+    await Firestore.instance.collection('UserRoles').where(
+        'email', isEqualTo: email).getDocuments()
+        .then((value) {
+      value.documents.forEach((f) =>
+      {
+        print(f.documentID),
+        Firestore.instance.collection('UserRoles')
+            .document(f.documentID)
+            .updateData({"email": updatedEmail})
+      });
+    });
+  }
   deleteFromUserRole(String email) async{
     print(email);
     await Firestore.instance.collection('UserRoles').where('email',isEqualTo: email).getDocuments().then((value){

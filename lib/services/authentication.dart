@@ -23,7 +23,6 @@ class Auth implements BaseAuth{
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
-    role.updateUserRole(email,user.uid);
     return user.uid;
   }
    Future<String> signUp(String email, String password, String id) async {

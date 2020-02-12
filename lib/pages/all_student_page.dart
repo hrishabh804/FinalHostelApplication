@@ -12,8 +12,8 @@ import 'package:hostel_project/ui/updateStudentInfo.dart';
 import 'package:slimy_card/slimy_card.dart';
 
 // ignore: must_be_immutable
-class StudentList extends StatefulWidget {
-  StudentList({this.uid,this.name,this.adminEmail,this.college, this.floor,this.roomNumber, this.roomCapacity});
+class AllStudentList extends StatefulWidget {
+  AllStudentList({this.uid,this.name,this.adminEmail,this.college, this.floor,this.roomNumber, this.roomCapacity});
   String uid;
   String name;
   String adminEmail;
@@ -25,11 +25,11 @@ class StudentList extends StatefulWidget {
   State<StatefulWidget> createState() {
 
     // TODO: implement createState
-    return _StudentListState();
+    return _AllStudentListState();
   }
 
 }
-class _StudentListState extends State<StudentList> {
+class _AllStudentListState extends State<AllStudentList> {
   List<Students> items;
   StudentFirestoreService db = new StudentFirestoreService();
   RoleFirestoreService db1 = new RoleFirestoreService();
@@ -40,12 +40,12 @@ class _StudentListState extends State<StudentList> {
 
 
   @override
-   initState() {
+  initState() {
 
     super.initState();
     items = new List();
     roomsSub?.cancel();
-    roomsSub = db.getStudentList(widget.roomNumber,widget.floor,widget.college).listen((QuerySnapshot snapshot) {
+    roomsSub = db.getAllStudentList(widget.college).listen((QuerySnapshot snapshot) {
       final List<Students> rooms = snapshot.documents
           .map((documentSnapshot) => Students.fromMap(documentSnapshot.data))
           .toList();
@@ -66,7 +66,7 @@ class _StudentListState extends State<StudentList> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('ROOM NUMBER:'+" "+widget.roomNumber),
+        title: Text('Students'),
         centerTitle: true,
         backgroundColor: Colors.blue,
       ),
@@ -98,17 +98,6 @@ class _StudentListState extends State<StudentList> {
 
             }),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () =>
-        {
-          widget.roomCapacity>items.length?
-          _createNewStudent1(context):_scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-        content: Text('OPPS!!!ROOM IS FULL',style: TextStyle(fontSize: 20,color: Colors.yellowAccent,),),
-        duration: Duration(seconds: 3),
-        )),
-        }),
     );
   }
 
@@ -168,35 +157,35 @@ class _StudentListState extends State<StudentList> {
   }
 
   myWidget1(Students item) {
-   return Container(
-       padding: const EdgeInsets.only(top: 5.0),
-       child: Column(
-         children: <Widget>[
-       item.imageURL != null
-       ? Image.network(
-         item.imageURL,
-         width: 500,
-         height: 240,
-       )
-           : Container(
-       height: 80,
-     width: 50,
-   ),
+    return Container(
+        padding: const EdgeInsets.only(top: 5.0),
+        child: Column(
+            children: <Widget>[
+              item.imageURL != null
+                  ? Image.network(
+                item.imageURL,
+                width: 500,
+                height: 240,
+              )
+                  : Container(
+                height: 80,
+                width: 50,
+              ),
 
-          Container(
-            alignment: Alignment.center,
-            child: Text('NAME:'+' '+item.name,
-               style: TextStyle(fontSize: 23,fontWeight: FontWeight.w900),),
-          ),
-           Container(
-             alignment: Alignment.center,
-             child: Text('USN:'+' '+item.usn,
-             style: TextStyle(fontSize: 23,fontWeight: FontWeight.w900),),
-           ),
+              Container(
+                alignment: Alignment.center,
+                child: Text('NAME:'+' '+item.name,
+                  style: TextStyle(fontSize: 23,fontWeight: FontWeight.w900),),
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: Text('USN:'+' '+item.usn,
+                  style: TextStyle(fontSize: 23,fontWeight: FontWeight.w900),),
+              ),
 
-         ]
+            ]
 
-   ));
+        ));
 
 
 
@@ -209,7 +198,7 @@ class _StudentListState extends State<StudentList> {
           SizedBox(height:10,),
           Container(alignment:Alignment.topLeft,child: Text('${'ROOM NO:'+' '+items.roomNumber}',style: TextStyle(fontSize:20,fontWeight: FontWeight.w800),textDirection: TextDirection.ltr,)),
           SizedBox(height: 5,),
-         Container(alignment:Alignment.topLeft,child:Text('${'FLOOR:'+' '+items.floor}',style: TextStyle(fontSize:20,fontWeight: FontWeight.w800),),),
+          Container(alignment:Alignment.topLeft,child:Text('${'FLOOR:'+' '+items.floor}',style: TextStyle(fontSize:20,fontWeight: FontWeight.w800),),),
           SizedBox(height: 5,),
           Container(alignment:Alignment.topLeft,child: Text('${'PHONE NO:'+' '+items.phoneNumber}',style: TextStyle(fontSize:20,fontWeight: FontWeight.w800),)),
           SizedBox(height: 5,),
@@ -225,8 +214,6 @@ class _StudentListState extends State<StudentList> {
           SizedBox(height: 5,),
           Container(alignment:Alignment.topLeft,child: Text('${'HOSTEL DUES:'+' '+items.dueHostelFees}',style: TextStyle(fontSize:20,fontWeight: FontWeight.w800),)),
           SizedBox(height: 10,),
-          Container(alignment: Alignment.center,child: RaisedButton(child: Text('UPDATE'),onPressed: ()=> _updateStudentInfo(context,items)),)
-
 
         ]
     );

@@ -33,6 +33,9 @@ dependencies:
   flutter_bloc:
   permission_handler:
   slimy_card:
+  pull_to_refresh: ^1.5.7
+  flip_card:
+
 
 dev_dependencies:
   flutter_test:

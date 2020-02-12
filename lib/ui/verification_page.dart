@@ -64,8 +64,6 @@ class _VerificationState extends State<Verification> {
               return Center(child: Text('PLEASE WAIT WE ARE VERIFYING AUR AUTHENTICITY',
                   style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2.0),),);
             }
-            print('yaha ayya');
-
             if(snapshot.hasError){
               _roleValidation();
             }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hostel_project/bloc_navigation/navigaition_bloc.dart';
+import 'package:hostel_project/pages/all_student_page.dart';
 import 'package:hostel_project/pages/floor_page.dart';
 import 'package:hostel_project/pages/home_page.dart';
 import 'package:hostel_project/services/authentication.dart';
@@ -110,11 +111,11 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         endIndent: 32,
                       ),
                       MenuItem(
-                        icon: Icons.home,
-                        title: "Home",
+                        icon: Icons.dashboard,
+                        title: "Dashboard",
                         onTap: () {
                           onIconPressed();
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage(name:widget.name,adminEmail:widget.adminEmail,uid:widget.uid,college:widget.college)));
                         },
                       ),
                       MenuItem(
@@ -126,16 +127,17 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         },
                       ),
                       MenuItem(
-                        icon: Icons.shopping_basket,
-                        title: "My Orders",
+                        icon: Icons.home,
+                        title: "Home Page",
                         onTap: () {
                           onIconPressed();
                           BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.StudentPageClickedEvent);
                         },
                       ),
                       MenuItem(
-                        icon: Icons.card_giftcard,
-                        title: "Wishlist",
+                        icon: Icons.account_circle,
+                        title: "Student",
+                        onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>AllStudentList(name:widget.name,adminEmail:widget.adminEmail,uid:widget.uid,college:widget.college)))
                       ),
                       Divider(
                         height: 64,
@@ -145,8 +147,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         endIndent: 32,
                       ),
                       MenuItem(
-                        icon: Icons.settings,
-                        title: "Settings",
+                        icon: Icons.warning,
+                        title: "Complains",
                       ),
                       MenuItem(
                         icon: Icons.exit_to_app,

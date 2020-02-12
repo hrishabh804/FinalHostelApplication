@@ -12,11 +12,17 @@ class StudentFirestoreService {
 
   StudentFirestoreService.internal();
 
-  Future<Students> createStudent(String usn, String name, String roomNumber, String floor, String collegeName,var imageURL,String email) {
+  Future<Students> createStudent(String usn, String name, String roomNumber, String floor, String collegeName,var imageURL,String email,String branch, String phoneNumber,
+      String fatherName,
+      String fatherNumber,
+      String motherName,
+      String motherNumber,
+      String permanentAddress,
+      String dueHostelFees) {
     print(email);
     final TransactionHandler createTransaction = (Transaction tx) async {
       final DocumentSnapshot ds = await tx.get(studentCollection.document());
-      final Students student = new Students(ds.documentID, usn, name, roomNumber, floor, collegeName,imageURL,email);
+      final Students student = new Students(ds.documentID, usn, name, roomNumber, floor, collegeName,imageURL,email,branch,phoneNumber,fatherName,fatherNumber,motherName,motherNumber,permanentAddress,dueHostelFees);
       final Map<String, dynamic> data = student.toMap();
       await tx.set(ds.reference, data);
       return data;
@@ -42,6 +48,20 @@ class StudentFirestoreService {
 
     return snapshots;
   }
+  Stream<QuerySnapshot> getAllStudentList(String college,{int offset, int limit}) {
+    Stream<QuerySnapshot> snapshots = studentCollection.where(
+        'collegeName', isEqualTo: college).snapshots();
+    if (offset != null) {
+      snapshots = snapshots.skip(offset);
+    }
+
+    if (limit != null) {
+      snapshots = snapshots.take(limit);
+    }
+
+    return snapshots;
+  }
+
 
   Future<dynamic> updateStudent(Students student) {
     final TransactionHandler updateTransaction = (Transaction tx) async {
@@ -77,6 +97,9 @@ class StudentFirestoreService {
   }
   Future<String> addStudentToRoom(String floor,String college, String room, String name) async {
     String str;
+    print(floor+'floors');
+    print(college+'college');
+    print(name+'name');
     List<String> list =[name];
     await Firestore.instance.collection('Rooms').where('collegeName',isEqualTo: college).where('floorLevel',isEqualTo:floor).where('roomNumber',isEqualTo:room).getDocuments().then((value){
       value.documents.forEach((f)=> {
@@ -97,6 +120,25 @@ class StudentFirestoreService {
       value.documents.forEach((f)=> {
         str = f.documentID,
         Firestore.instance.collection('Rooms').document(f.documentID).updateData({"students":FieldValue.arrayRemove(list)})
+      });return str;
+    });
+    print(str);
+    await new Future.delayed(const Duration(seconds: 5));
+    return str;
+
+  }
+  Future<String> updateStudentFromRoom(String floor,String college, String room, String name,String updatedName) async {
+    List<String> list =[name.toUpperCase()];
+    List<String> list1 =[updatedName.toUpperCase()];
+    print(list);
+    String str;
+    await Firestore.instance.collection('Rooms').where('collegeName',isEqualTo: college).where('floorLevel',isEqualTo:floor).where('roomNumber',isEqualTo:room).getDocuments().then((value){
+      value.documents.forEach((f)=> {
+        str = f.documentID,
+        print(f.documentID),
+        Firestore.instance.collection('Rooms').document(f.documentID).updateData({"students":FieldValue.arrayRemove(list)}),
+        Firestore.instance.collection('Rooms').document(f.documentID).updateData({"students":FieldValue.arrayUnion(list1)})
+
       });return str;
     });
     print(str);

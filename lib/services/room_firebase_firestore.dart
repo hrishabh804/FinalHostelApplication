@@ -45,6 +45,18 @@ class RoomsFirestoreService {
 
     return snapshots;
   }
+  Stream<QuerySnapshot> getAllRoomList(String college,{int offset, int limit}) {
+    Stream<QuerySnapshot> snapshots = roomsCollection.where('collegeName',isEqualTo: college).snapshots();
+    if (offset != null) {
+      snapshots = snapshots.skip(offset);
+    }
+
+    if (limit != null) {
+      snapshots = snapshots.take(limit);
+    }
+
+    return snapshots;
+  }
 
   Future<dynamic> updateRooms(UpdateRooms rooms) async {
     final TransactionHandler updateTransaction = (Transaction tx) async {

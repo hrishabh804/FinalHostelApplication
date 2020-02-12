@@ -10,8 +10,8 @@ import 'package:hostel_project/ui/rooms_screen.dart';
 
 
 // ignore: must_be_immutable
-class RoomList extends StatefulWidget {
-  RoomList({this.uid,this.name,this.adminEmail,this.college, this.floor});
+class AllRoomList extends StatefulWidget {
+  AllRoomList({this.uid,this.name,this.adminEmail,this.college, this.floor});
   String uid;
   String name;
   String adminEmail;
@@ -21,12 +21,12 @@ class RoomList extends StatefulWidget {
   State<StatefulWidget> createState() {
 
     // TODO: implement createState
-    return _RoomListState();
+    return _AllRoomListState();
   }
 
 }
 
-class _RoomListState extends State<RoomList> {
+class _AllRoomListState extends State<AllRoomList> {
   List<Rooms> items;
   RoomsFirestoreService db = new RoomsFirestoreService();
 
@@ -40,9 +40,8 @@ class _RoomListState extends State<RoomList> {
     items = new List();
 
     roomsSub?.cancel();
-    print(widget.floor+'floor at Rooms');
     print(widget.college);
-    roomsSub = db.getRoomList(widget.college,widget.floor).listen((QuerySnapshot snapshot) {
+    roomsSub = db.getAllRoomList(widget.college).listen((QuerySnapshot snapshot) {
       final List<Rooms> rooms = snapshot.documents
           .map((documentSnapshot) => Rooms.fromMap(documentSnapshot.data))
           .toList();
@@ -61,25 +60,25 @@ class _RoomListState extends State<RoomList> {
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-            title: Text('ROOMS'),
-            centerTitle: true,
-            backgroundColor: Colors.blue,
-        ),
-        body: Center(
-          child: ListView.builder(
-              itemCount: items.length,
-              padding: const EdgeInsets.all(15.0),
-              itemBuilder: (context, position) {
-                return Dismissible(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('ROOMS'),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+      ),
+      body: Center(
+        child: ListView.builder(
+            itemCount: items.length,
+            padding: const EdgeInsets.all(15.0),
+            itemBuilder: (context, position) {
+              return Dismissible(
                   key: ObjectKey(items[position]),
-                    background: stackBehindDismiss(),
-                    child:Column(
-                  children: <Widget>[
-                    Card(
-                      child: ListTile(
-                        title: Text(
+                  background: stackBehindDismiss(),
+                  child:Column(
+                    children: <Widget>[
+                      Card(
+                        child: ListTile(
+                          title: Text(
                             '${items[position].roomNumber}',
                             style: TextStyle(
                               fontSize: 22.0,
@@ -87,56 +86,51 @@ class _RoomListState extends State<RoomList> {
 
                             ),
                           ),
-                      subtitle:Text(
-                        '${items[position].floorLevel}',
-                        style: new TextStyle(
-                          fontSize: 18
-                        ),
-                      ),
-
-                        leading: Column(
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.all(0.0)),
-                            CircleAvatar(
-                              child: Icon(
-                                Icons.hotel
-                              ),
+                          subtitle:Text(
+                            '${items[position].floorLevel}',
+                            style: new TextStyle(
+                                fontSize: 18
                             ),
-                          ],
-                        ),
-                        trailing: Column(
-                          children: <Widget>[
-                            SizedBox(height: 10,),
-                            Text('ROOM CAPACITY:'+' '+'${items[position].maxRoomCapacity}',textAlign: TextAlign.end,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w300),),
-                            Text('ALLOCATED:'+' '+'${items[position].students.length}',textAlign: TextAlign.end,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w300)),
-                            Text('REMAINING:'+' '+'${items[position].maxRoomCapacity-items[position].students.length}',textAlign: TextAlign.end,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w300))
+                          ),
+
+                          leading: Column(
+                            children: <Widget>[
+                              Padding(padding: EdgeInsets.all(0.0)),
+                              CircleAvatar(
+                                child: Icon(
+                                    Icons.hotel
+                                ),
+                              ),
+                            ],
+                          ),
+                          trailing: Column(
+                            children: <Widget>[
+                              SizedBox(height: 10,),
+                              Text('ROOM CAPACITY:'+' '+'${items[position].maxRoomCapacity}',textAlign: TextAlign.end,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w300),),
+                              Text('ALLOCATED:'+' '+'${items[position].students.length}',textAlign: TextAlign.end,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w300)),
+                              Text('REMAINING:'+' '+'${items[position].maxRoomCapacity-items[position].students.length}',textAlign: TextAlign.end,style: TextStyle(fontSize: 12,fontWeight: FontWeight.w300))
 
 
-                ],
+                            ],
+                          ),
+                          onTap: () => _navigateToStudent(context, items[position].roomNumber, items[position].floorLevel,items[position].maxRoomCapacity),
+                          onLongPress: ()=> _navigateToRooms(context,items[position]),
                         ),
-                        onTap: () => _navigateToStudent(context, items[position].roomNumber, items[position].floorLevel,items[position].maxRoomCapacity),
-                        onLongPress: ()=> _navigateToRooms(context,items[position]),
+
                       ),
 
-                    ),
-
-                  ],
-                ),
+                    ],
+                  ),
                   confirmDismiss: (direction) {
                     _showDialog(context,items[position],position);
                     return null;
 
 
                   }
-                );
+              );
 
-              }),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => _createNewRooms(context),
-
-        ),
+            }),
+      ),
     );
   }
 
