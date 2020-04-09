@@ -61,6 +61,21 @@ class StudentFirestoreService {
 
     return snapshots;
   }
+  Stream<QuerySnapshot> getLoggedStudent(String email,{int offset, int limit}) {
+    Stream<QuerySnapshot> snapshots = studentCollection.where(
+        'email', isEqualTo:email).snapshots();
+    print(email);
+    print('upar wala email');
+    if (offset != null) {
+      snapshots = snapshots.skip(offset);
+    }
+
+    if (limit != null) {
+      snapshots = snapshots.take(limit);
+    }
+
+    return snapshots;
+  }
 
 
   Future<dynamic> updateStudent(Students student) {

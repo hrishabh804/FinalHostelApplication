@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hostel_project/services/authentication.dart';
+import 'package:hostel_project/student_folder/role_as_student.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'admin_page.dart';
 
@@ -82,7 +83,7 @@ class _VerificationState extends State<Verification> {
               print("sucess");
               print(doc['name']);
               print(snapshot.data.documents.length);
-              return AdminPage(uid:widget.userId,name:doc['name'],adminEmail:_userEmail,college:doc['college']);
+              return RoleStudent(uid:widget.userId,name:doc['name'],studentEmail:_userEmail,college:doc['college']);
             }
             return _roleValidation();
           },),

@@ -4,7 +4,7 @@ import 'package:hostel_project/services/user_roles_firestore.dart';
 abstract class BaseAuth{
   Future<String> signIn(String email, String password);
 
-  Future<String> signUp(String email, String password,String id);
+  Future<String> signUp(String email, String password);
 
   Future<FirebaseUser> getCurrentUser();
 
@@ -25,7 +25,7 @@ class Auth implements BaseAuth{
     FirebaseUser user = result.user;
     return user.uid;
   }
-   Future<String> signUp(String email, String password, String id) async {
+   Future<String> signUp(String email, String password) async {
     AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;

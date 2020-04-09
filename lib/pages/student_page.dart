@@ -30,12 +30,13 @@ class ColorChoices {
   ];
 }
 List<TodoObject> list = [
-  TodoObject.import( "Dashboard", ColorChoices.choices[1], Icons.dashboard,'Gives statical view app'),
+  TodoObject.import( "Dashboard", ColorChoices.choices[1], Icons.dashboard,'Gives statical view of app'),
   TodoObject("Floors", Icons.hotel,'Create edit Floors'),
   TodoObject("Rooms", Icons.star,'Create edit Rooms'),
   TodoObject("Students", Icons.account_circle,'List of all students in hostel'),
-  TodoObject("Complains", Icons.warning,'List of problem faced by students'),
+  TodoObject("Complains", Icons.warning,'Problems faced by students'),
 ];
+
 
 
 class StudentPageState extends State<StudentPage> {
