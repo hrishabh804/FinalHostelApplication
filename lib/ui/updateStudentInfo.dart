@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hostel_project/model/Student.dart';
 import 'package:hostel_project/services/student_firestore_firebase.dart';
 import 'package:hostel_project/services/user_roles_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 // ignore: must_be_immutable
 class UpdateStudentInfo extends StatefulWidget{
   UpdateStudentInfo(this.students);
@@ -62,6 +65,7 @@ class UpdateStudentInfoState extends State<UpdateStudentInfo>{
 
   @override
   Widget build(BuildContext context) {
+    final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(title: Text('ADD STUDENT')),
@@ -238,7 +242,8 @@ class UpdateStudentInfoState extends State<UpdateStudentInfo>{
                   Container()
 
                 ],),
-                RaisedButton(
+                RoundedLoadingButton(
+                  controller: _btnController,
                     child: (widget.students.id != null) ? Text('Update') : Text(
                         'Add'),
                     onPressed: (){
@@ -260,8 +265,8 @@ class UpdateStudentInfoState extends State<UpdateStudentInfo>{
                               _usnController.text.toUpperCase(),
                               _nameController.text.toUpperCase(),
                               _roomNumberController.text.toUpperCase(),
-                              _floorController.text.toUpperCase(),
                               _collegeNameController.text.toUpperCase(),
+                              _floorController.text.toUpperCase(),
                               widget.students.imageURL,
                               _emailController.text,_branchController.text,_phoneNumberController.text,_fatherNameController.text,_fatherNumberController.text,_motherNameController.text,_motherNumberController.text,_permanentAddressController.text,_dueHostelFessController.text));
                           Navigator.of(context).pop();
@@ -333,8 +338,8 @@ class UpdateStudentInfoState extends State<UpdateStudentInfo>{
             _usnController.text.toUpperCase(),
             _nameController.text.toUpperCase(),
             _roomNumberController.text.toUpperCase(),
-            _floorController.text.toUpperCase(),
             _collegeNameController.text.toUpperCase(),
+            _floorController.text.toUpperCase(),
             _uploadFileURL,
             _emailController.text,_branchController.text,_phoneNumberController.text,_fatherNameController.text,_fatherNumberController.text,_motherNameController.text,_motherNumberController.text,_permanentAddressController.text,_dueHostelFessController.text));
 
@@ -358,8 +363,8 @@ class UpdateStudentInfoState extends State<UpdateStudentInfo>{
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Alert Dialog title"),
-          content: new Text("Alert Dialog body"),
+          title: new Text("Updating Data"),
+          content: new Text("PLEASE WAIT......"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
@@ -381,7 +386,7 @@ class UpdateStudentInfoState extends State<UpdateStudentInfo>{
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Alert Dialog title"),
+          title: new Text("Sucess Message"),
           content: new Text("Data Uploaded Sucessfully"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog

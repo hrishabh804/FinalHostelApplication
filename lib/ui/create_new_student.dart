@@ -5,6 +5,7 @@ import 'package:hostel_project/model/Student.dart';
 import 'package:hostel_project/services/student_firestore_firebase.dart';
 import 'package:hostel_project/services/user_roles_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 // ignore: must_be_immutable
 class CreateStudentPage extends StatefulWidget {
@@ -38,6 +39,8 @@ class _CreateStudentPageState extends State<CreateStudentPage> {
   bool isLoading=false;
   final _formKey = GlobalKey<FormState>();
   var unsubscribe;
+  final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+
 
   @override
   void initState() {
@@ -237,7 +240,8 @@ class _CreateStudentPageState extends State<CreateStudentPage> {
                 Container()
 
               ],),
-              RaisedButton(
+              RoundedLoadingButton(
+                  controller: _btnController,
                   child: (widget.students.id != null) ? Text('Update') : Text(
                       'Add'),
                   onPressed: (){
@@ -291,9 +295,6 @@ class _CreateStudentPageState extends State<CreateStudentPage> {
   Future uploadFile() async {
     String usn = _usnController.text.toUpperCase();
     String college = widget.students.floor.toUpperCase();
-    _showDialog();
-
-
     StorageReference storageReference = FirebaseStorage.instance.ref().child(
         'Students/$college/$usn');
     StorageUploadTask uploadTask = storageReference.putFile(_image);
@@ -341,7 +342,7 @@ class _CreateStudentPageState extends State<CreateStudentPage> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Alert Dialog title"),
+          title: new Text(""),
           content: new Text("Alert Dialog body"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -364,7 +365,7 @@ class _CreateStudentPageState extends State<CreateStudentPage> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Alert Dialog title"),
+          title: new Text("Sucess Message"),
           content: new Text("Data Uploaded Sucessfully"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog

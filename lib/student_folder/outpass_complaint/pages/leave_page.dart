@@ -80,7 +80,8 @@ class _LeavePageState extends State<LeavePage> {
             new Text('inTime : $inTime'),
             new Text('address : $address'),
             new Text('reason : $reason'),
-            new Text('Status: $status',style: TextStyle(color: Colors.red),)
+            status=="Accepted......."?new Text('Status: $status',style: TextStyle(color: Colors.green,fontWeight: FontWeight.w900),):new Text('Status: $status',style: TextStyle(color: Colors.red,fontWeight: FontWeight.w900),),
+
           ],
         ),
       ),

@@ -95,7 +95,7 @@ class _VerificationState extends State<Verification> {
     return Scaffold(
       appBar: AppBar(title:Text('NO ENTRY FOUND')),
       body: AlertDialog(
-        title: Text('NO ENRTY POINT'),
+        title: Text('NO ENTRY POINT'),
         content: Text('PLEASE CONTACT YOUR WARDEN FOR FUTHER INFORMATION'),
         actions: <Widget>[
           RaisedButton(
